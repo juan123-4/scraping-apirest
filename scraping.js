@@ -36,8 +36,6 @@ async function scrapeNoticias() {
     }
 }
 
-// Endpoint para ejecutar el scraping
-app.get('/scraping', async (req, res) => {
-    await scrapeNoticias();
-    res.send('Scraping completado y datos guardados en noticias.json');
-});
+
+
+module.exports=(scrapeNoticias)

@@ -1,6 +1,7 @@
 const express=require("express");
 const fs= require("fs")
 const app=express();
+const scrape=require("./scraping")
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const port=3000;
@@ -17,11 +18,15 @@ function leerDatos() {
   function guardarDatos() {
     fs.writeFileSync('noticias.json', JSON.stringify(noticias, null, 2));
   }
-
+  app.get('/scraping', async (req, res) => 
+    { await scrape(); res.send('Scraping completado y datos guardados en noticias.json'); });
+  
+  
   app.get("/noticias",(req,res)=>{
     leerDatos();
     res.json(noticias)
   })
+  console.log(noticias)
   // Obtener una noticia por índice 
   app.get('/noticias/:indice', (req, res) => { leerDatos(); const indice =
      parseInt(req.params.indice); 
@@ -34,6 +39,7 @@ app.post("/noticias",(req,res)=>{
     noticias.push(nuevanoticia);
     guardarDatos();
     res.status(201).send("noticia creada")
+    
 })
 
 app.put('/noticias/:indice', (req, res) => { leerDatos(); const indice =
